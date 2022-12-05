@@ -23,6 +23,9 @@ public class EntityTagHeaderFilter : IAsyncActionFilter
         if (string.IsNullOrEmpty(entityTag))
             return;
 
+        if (!entityTag.Contains('"'))
+            entityTag = $"\"{entityTag}\"";
+
         context.HttpContext.Response.Headers.Add(HeaderName, entityTag);
 
         await Task.CompletedTask;
