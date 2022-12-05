@@ -34,7 +34,9 @@ public class TarefaController : ControllerBase
         if (tarefa == null)
             return NotFound();
 
-        await _tarefaRepository.Atualizar(id, model);
+        model.Id = id;
+
+        await _tarefaRepository.Atualizar(model);
 
         return Ok(model);
     }
