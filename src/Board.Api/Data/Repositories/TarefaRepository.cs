@@ -48,10 +48,10 @@ public class TarefaRepository : ITarefaRepository
         return context.Tarefas.FirstOrDefault(x => x != null && x.Id == id);
     }
 
-    public async Task Atualizar(int id, Tarefa model)
+    public async Task Atualizar(Tarefa model)
     {
         await using var context = new BoardContext();
-        var tarefa = await context.Tarefas.SingleOrDefaultAsync(x => x.Id == id);
+        var tarefa = await context.Tarefas.SingleOrDefaultAsync(x => x.Id == model.Id);
 
         if (tarefa != null)
         {

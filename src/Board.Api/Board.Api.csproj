@@ -8,12 +8,31 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Data\Context\" />
+    <Folder Include="Infrastructure\Attributes\" />
+    <Folder Include="Infrastructure\Features\" />
+    <Folder Include="Infrastructure\Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Infrastructure\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Infrastructure\Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

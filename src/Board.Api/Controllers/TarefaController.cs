@@ -1,6 +1,12 @@
 ﻿using Board.Api.Data.Repositories;
+using Board.Api.Infrastructure;
+using Board.Api.Infrastructure.Attributes;
+using Board.Api.Infrastructure.Extensions;
 using Board.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Net;
+using System.Resources;
 
 namespace Board.Api.Controllers;
 
@@ -15,6 +21,7 @@ public class TarefaController : ControllerBase
         _tarefaRepository = tarefaRepository;
     }
 
+    [ETag]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> BuscarPorId(int id)
     {
@@ -26,6 +33,7 @@ public class TarefaController : ControllerBase
         return Ok(tarefa);
     }
 
+    [ETag]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Atualizar([FromRoute] int id, [FromBody] Tarefa model)
     {
@@ -34,8 +42,19 @@ public class TarefaController : ControllerBase
         if (tarefa == null)
             return NotFound();
 
-        await _tarefaRepository.Atualizar(id, model);
+        if (Request.GetEntityTagHandler().Match(tarefa))
+        {
+            model.Id = id;
 
-        return Ok(model);
+            await _tarefaRepository.Atualizar(model);
+            return Ok(model);
+        }
+
+        var resource = new ResourceManager(typeof(Resource));
+
+        var message = resource.GetString("PreconditionFailedMessage");
+        var result = JsonConvert.SerializeObject(message);
+
+        return await Task.FromResult(StatusCode((int)HttpStatusCode.PreconditionFailed, result));
     }
 }
