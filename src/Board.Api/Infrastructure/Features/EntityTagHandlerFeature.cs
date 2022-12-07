@@ -19,6 +19,9 @@ public class EntityTagHandlerFeature : IEntityTagHandlerFeature
         if (string.IsNullOrEmpty(entityTag))
             return false;
 
+        if (!entityTag.Contains('"'))
+            entityTag = $"\"{entityTag}\"";
+
         return entityTagHeader.Equals(entityTag);
     }
 }
